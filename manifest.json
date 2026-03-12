@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "HTML Visual Editor",
+  "version": "1.0.0",
+  "description": "像编辑PPT一样可视化编辑本地HTML文件 — 拖拽、缩放、表格、图表、图片粘贴",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "sidePanel",
+    "contextMenus",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel/panel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>", "file:///*"],
+      "js": [
+        "utils/html-serializer.js",
+        "utils/file-manager.js",
+        "content/history.js",
+        "content/selector.js",
+        "content/drag-move.js",
+        "content/resize.js",
+        "content/text-edit.js",
+        "content/table-edit.js",
+        "content/image-handler.js",
+        "content/align-guide.js",
+        "content/toolbar.js",
+        "content/insert-panel.js",
+        "content/context-menu.js",
+        "content/page-sorter.js",
+        "content/editor-core.js"
+      ],
+      "css": ["styles/inject.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "styles/*"],
+      "matches": ["<all_urls>", "file:///*"]
+    }
+  ]
+}

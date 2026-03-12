@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>属性面板</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <div class="panel-container">
+    <div class="panel-header">
+      <h2>属性面板</h2>
+      <span class="panel-badge">Visual Editor</span>
+    </div>
+
+    <div class="panel-empty" id="empty-state">
+      <div class="empty-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D4CFC7" stroke-width="1.5">
+          <rect x="3" y="3" width="18" height="18" rx="3"/>
+          <path d="M3 9h18M9 21V9"/>
+        </svg>
+      </div>
+      <p>选中页面元素查看属性</p>
+      <span class="empty-hint">单击选中 · 双击编辑 · 双击空白插入</span>
+    </div>
+
+    <div class="panel-content" id="panel-content" style="display:none;">
+      <div class="section">
+        <div class="section-title">元素信息</div>
+        <div class="prop-row">
+          <span class="prop-label">标签</span>
+          <span class="prop-value tag-badge" id="prop-tag">-</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">ID</span>
+          <input class="prop-input" id="prop-id" placeholder="无 ID">
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">Class</span>
+          <input class="prop-input" id="prop-class" placeholder="无 Class">
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">位置 & 尺寸</div>
+        <div class="prop-grid">
+          <label><span>X</span><input type="number" id="prop-x" class="prop-input-sm"></label>
+          <label><span>Y</span><input type="number" id="prop-y" class="prop-input-sm"></label>
+          <label><span>W</span><input type="number" id="prop-w" class="prop-input-sm"></label>
+          <label><span>H</span><input type="number" id="prop-h" class="prop-input-sm"></label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">文字</div>
+        <div class="prop-row">
+          <span class="prop-label">字号</span>
+          <input type="number" class="prop-input-sm" id="prop-font-size">
+          <span class="prop-unit">px</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">行高</span>
+          <input type="number" class="prop-input-sm" id="prop-line-height" step="0.1">
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">字重</span>
+          <select class="prop-select" id="prop-font-weight">
+            <option value="normal">Normal</option>
+            <option value="500">Medium</option>
+            <option value="600">Semi Bold</option>
+            <option value="bold">Bold</option>
+          </select>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">对齐</span>
+          <div class="align-group">
+            <button class="align-btn active" data-align="left" title="左对齐">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+            </button>
+            <button class="align-btn" data-align="center" title="居中">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            </button>
+            <button class="align-btn" data-align="right" title="右对齐">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">颜色</div>
+        <div class="prop-row">
+          <span class="prop-label">文字</span>
+          <input type="color" id="prop-color" class="prop-color">
+          <span class="prop-hex" id="prop-color-hex">#000000</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">背景</span>
+          <input type="color" id="prop-bg-color" class="prop-color">
+          <span class="prop-hex" id="prop-bg-hex">#FFFFFF</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">外观</div>
+        <div class="prop-row">
+          <span class="prop-label">圆角</span>
+          <input type="number" class="prop-input-sm" id="prop-radius">
+          <span class="prop-unit">px</span>
+        </div>
+        <div class="prop-row">
+          <span class="prop-label">透明度</span>
+          <input type="range" min="0" max="100" id="prop-opacity" class="prop-range">
+          <span class="prop-unit" id="prop-opacity-val">100%</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">间距</div>
+        <div class="prop-grid">
+          <label><span>上</span><input type="number" id="prop-mt" class="prop-input-sm"></label>
+          <label><span>右</span><input type="number" id="prop-mr" class="prop-input-sm"></label>
+          <label><span>下</span><input type="number" id="prop-mb" class="prop-input-sm"></label>
+          <label><span>左</span><input type="number" id="prop-ml" class="prop-input-sm"></label>
+        </div>
+        <div class="prop-grid" style="margin-top:6px;">
+          <label><span>内上</span><input type="number" id="prop-pt" class="prop-input-sm"></label>
+          <label><span>内右</span><input type="number" id="prop-pr" class="prop-input-sm"></label>
+          <label><span>内下</span><input type="number" id="prop-pb" class="prop-input-sm"></label>
+          <label><span>内左</span><input type="number" id="prop-pl" class="prop-input-sm"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="panel.js"></script>
+</body>
+</html>

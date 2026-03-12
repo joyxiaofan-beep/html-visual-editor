@@ -1,0 +1,1103 @@
+/* ============================================
+   HTML Visual Editor v2 — 注入样式
+   设计：温暖 Claude 风格 (琥珀/棕色基调)
+   ============================================ */
+
+[data-hve-hovered] {
+  outline: 2px dashed #D97706 !important;
+  outline-offset: 2px !important;
+  cursor: pointer !important;
+}
+
+/* 表格单元格 hover：outline 向内，避免表格布局变化 */
+td[data-hve-hovered],
+th[data-hve-hovered],
+tr[data-hve-hovered] {
+  outline-offset: -2px !important;
+}
+
+[data-hve-selected] {
+  outline: 2px solid #D97706 !important;
+  outline-offset: 2px !important;
+  cursor: move !important;
+}
+
+/* 非表格元素选中时才添加 position:relative（表格单元格自带 relative，重复设置会导致布局错位） */
+[data-hve-selected]:not(td):not(th):not(tr):not(thead):not(tbody):not(tfoot):not(table) {
+  position: relative;
+}
+
+/* 选中态提示（单击选中=可拖动，双击=可编辑） */
+/* 非表格单元格：使用 ::before 伪元素显示标签 */
+[data-hve-selected]:not(td):not(th):not(tr)::before {
+  content: attr(data-hve-select-label);
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font: 10px/1 'SF Pro Text', -apple-system, sans-serif;
+  color: white;
+  background: #D97706;
+  padding: 2px 6px;
+  border-radius: 4px 4px 0 0;
+  pointer-events: none;
+  z-index: 2147483641;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+/* 表格元素选中：不使用 ::before 伪元素（避免撑大单元格导致表格错位） */
+/* 标签通过 JS 浮层方式显示（见 selector.js） */
+td[data-hve-selected],
+th[data-hve-selected],
+tr[data-hve-selected] {
+  outline-offset: -2px !important;
+}
+
+/* 表格整体选中时 */
+table[data-hve-selected] {
+  outline-offset: 2px !important;
+  position: relative;
+}
+
+/* 编辑态明确用蓝色区分 */
+
+[data-hve-dragging] {
+  opacity: 0.85 !important;
+  outline: 2px dashed #B45309 !important;
+  cursor: grabbing !important;
+  box-shadow: 0 8px 32px rgba(45,43,40,0.2), 0 2px 8px rgba(217,119,6,0.15) !important;
+  transition: box-shadow 0.15s ease, opacity 0.15s ease !important;
+  z-index: 10000 !important;
+}
+
+[data-hve-editing] {
+  outline: 2px solid #2563EB !important;
+  outline-offset: 2px !important;
+  cursor: text !important;
+  min-height: 1em;
+}
+
+/* 表格单元格编辑态：outline 向内偏移，避免撑大表格 */
+td[data-hve-editing],
+th[data-hve-editing] {
+  outline-offset: -2px !important;
+}
+
+/* ---- 浮动工具栏 ---- */
+[data-hve-toolbar] {
+  position: fixed;
+  display: none;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(45,43,40,0.12), 0 1px 4px rgba(45,43,40,0.08);
+  z-index: 2147483644;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  user-select: none;
+  backdrop-filter: blur(8px);
+  /* CSS 隔离：防止被编辑页面的全局样式污染工具栏 */
+  writing-mode: horizontal-tb;
+  direction: ltr;
+  text-align: left;
+  word-break: normal;
+  word-wrap: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+  text-indent: 0;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+[data-hve-toolbar] .hve-tb-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* 隔离：工具栏内所有元素继承安全的文本排列 */
+[data-hve-toolbar] * {
+  writing-mode: horizontal-tb;
+  direction: ltr;
+  word-break: normal;
+  box-sizing: border-box;
+}
+
+[data-hve-toolbar] .hve-tb-sep {
+  width: 1px;
+  height: 22px;
+  background: #E8E5E0;
+  margin: 0 4px;
+}
+
+[data-hve-toolbar] button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: #5D534A;
+  transition: all 0.15s ease;
+  padding: 0;
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+[data-hve-toolbar] button:hover {
+  background: #F0EDE8;
+  color: #2D2B28;
+}
+
+[data-hve-toolbar] button:active {
+  background: #E8E5E0;
+  transform: scale(0.93);
+}
+
+[data-hve-toolbar] button.hve-active {
+  background: #D97706;
+  color: white;
+}
+
+[data-hve-toolbar] button.hve-active:hover {
+  background: #B45309;
+}
+
+[data-hve-toolbar] .hve-tb-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 64px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ---- 下拉菜单（position:fixed，JS 控制视口定位） ---- */
+[data-hve-dropdown] {
+  position: fixed;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(45,43,40,0.15);
+  padding: 6px;
+  z-index: 2147483645;
+  min-width: 140px;
+  max-height: 320px;
+  overflow-y: auto;
+  animation: hve-dropdown-in 0.15s ease;
+  white-space: normal;
+}
+
+[data-hve-dropdown] .hve-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #5D534A;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+
+[data-hve-dropdown] .hve-dd-item:hover {
+  background: #F0EDE8;
+  color: #2D2B28;
+}
+
+[data-hve-dropdown] .hve-dd-item .hve-dd-icon {
+  font-size: 15px;
+  width: 20px;
+  text-align: center;
+}
+
+[data-hve-dropdown] .hve-dd-divider {
+  height: 1px;
+  background: #E8E5E0;
+  margin: 4px 0;
+}
+
+@keyframes hve-dropdown-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-4px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ---- 插入指示器（空白区域点击） ---- */
+[data-hve-insert-indicator] {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #D97706;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 2147483640;
+  animation: hve-indicator-pulse 1.5s ease infinite;
+}
+
+@keyframes hve-indicator-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ---- 插入面板（点击空白区域后弹出） ---- */
+[data-hve-insert-panel] {
+  position: fixed;
+  z-index: 2147483646;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(45,43,40,0.18), 0 2px 8px rgba(45,43,40,0.08);
+  padding: 8px;
+  min-width: 200px;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  animation: hve-panel-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-hve-insert-panel] .hve-ip-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9C8E82;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 8px 12px 6px;
+}
+
+[data-hve-insert-panel] .hve-ip-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+[data-hve-insert-panel] .hve-ip-item:hover {
+  background: #F0EDE8;
+}
+
+[data-hve-insert-panel] .hve-ip-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  background: #F5F2ED;
+}
+
+[data-hve-insert-panel] .hve-ip-text {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-hve-insert-panel] .hve-ip-text span:first-child {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2D2B28;
+}
+
+[data-hve-insert-panel] .hve-ip-text span:last-child {
+  font-size: 11px;
+  color: #9C8E82;
+  margin-top: 1px;
+}
+
+@keyframes hve-panel-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ---- 对话框 ---- */
+[data-hve-dialog-overlay] {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(45,43,40,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 2147483645;
+  animation: hve-fade-in 0.2s ease;
+}
+
+[data-hve-dialog] {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 2147483646;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(45,43,40,0.2);
+  padding: 28px;
+  min-width: 320px;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  animation: hve-dialog-in 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-hve-dialog] h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2D2B28;
+  margin-bottom: 20px;
+}
+
+[data-hve-dialog] label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #7A6F65;
+  margin-bottom: 6px;
+}
+
+[data-hve-dialog] input[type="number"],
+[data-hve-dialog] input[type="text"],
+[data-hve-dialog] select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E8E5E0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  color: #2D2B28;
+  transition: border-color 0.2s;
+}
+
+[data-hve-dialog] input:focus,
+[data-hve-dialog] select:focus {
+  outline: none;
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217,119,6,0.12);
+}
+
+[data-hve-dialog] .hve-dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+[data-hve-dialog] .hve-btn-cancel {
+  padding: 9px 18px;
+  border: 1px solid #E8E5E0;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #5D534A;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+[data-hve-dialog] .hve-btn-cancel:hover {
+  background: #F5F2ED;
+}
+
+[data-hve-dialog] .hve-btn-confirm {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #D97706, #B45309);
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  box-shadow: 0 2px 8px rgba(217,119,6,0.3);
+  transition: all 0.15s;
+}
+
+[data-hve-dialog] .hve-btn-confirm:hover {
+  background: linear-gradient(135deg, #B45309, #92400E);
+  box-shadow: 0 4px 12px rgba(217,119,6,0.4);
+}
+
+@keyframes hve-dialog-in {
+  from { opacity: 0; transform: translate(-50%,-50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+}
+
+@keyframes hve-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---- Toast ---- */
+@keyframes hve-toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ---- Resize 手柄 ---- */
+[data-hve-resize-container] {
+  pointer-events: none;
+}
+
+[data-hve-handle] {
+  pointer-events: all;
+  transition: background 0.15s, transform 0.15s;
+}
+
+[data-hve-handle]:hover {
+  background: #B45309 !important;
+  transform: scale(1.3);
+}
+
+/* ---- 右键菜单 ---- */
+[data-hve-context-menu] {
+  position: fixed;
+  z-index: 2147483645;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(45,43,40,0.15);
+  padding: 6px;
+  min-width: 180px;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  animation: hve-dropdown-in 0.15s ease;
+}
+
+[data-hve-context-menu] .hve-cm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #5D534A;
+  transition: background 0.12s;
+}
+
+[data-hve-context-menu] .hve-cm-item:hover {
+  background: #F0EDE8;
+  color: #2D2B28;
+}
+
+[data-hve-context-menu] .hve-cm-item.danger {
+  color: #DC2626;
+}
+
+[data-hve-context-menu] .hve-cm-item.danger:hover {
+  background: #FEF2F2;
+}
+
+[data-hve-context-menu] .hve-cm-divider {
+  height: 1px;
+  background: #E8E5E0;
+  margin: 4px 0;
+}
+
+[data-hve-context-menu] .hve-cm-icon {
+  width: 18px;
+  text-align: center;
+  font-size: 14px;
+}
+
+[data-hve-context-menu] .hve-cm-shortcut {
+  margin-left: auto;
+  font-size: 11px;
+  color: #B8ADA4;
+  font-family: 'SF Mono', monospace;
+}
+
+/* ---- 状态指示器 ---- */
+[data-hve-status] {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #D97706, #B45309);
+  color: white;
+  border-radius: 24px;
+  font: 13px/1.4 'SF Pro Text',-apple-system,sans-serif;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(217,119,6,0.35);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+[data-hve-status]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(217,119,6,0.45);
+}
+
+[data-hve-status] .hve-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #4ADE80;
+  border-radius: 50%;
+  animation: hve-pulse 2s ease infinite;
+}
+
+@keyframes hve-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ---- 快速添加按钮 ---- */
+[data-hve-quick-add] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---- 多选样式 ---- */
+[data-hve-multi-selected] {
+  outline: 2px solid #D97706 !important;
+  outline-offset: 2px !important;
+  cursor: move !important;
+  box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.12) !important;
+}
+
+/* 框选预览高亮 */
+[data-hve-marquee-preview] {
+  outline: 2px dashed #2563EB !important;
+  outline-offset: 1px !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+/* 框选矩形 */
+[data-hve-marquee] {
+  transition: none !important;
+}
+
+/* 多选信息提示 */
+[data-hve-multi-toast] {
+  position: fixed;
+  bottom: 64px;
+  right: 20px;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 14px;
+  font: 13px/1.4 'SF Pro Text', -apple-system, sans-serif;
+  color: #5D534A;
+  box-shadow: 0 4px 16px rgba(45, 43, 40, 0.12);
+  user-select: none;
+  animation: hve-panel-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-hve-multi-toast] .hve-multi-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+[data-hve-multi-toast] .hve-multi-dot {
+  width: 8px;
+  height: 8px;
+  background: #D97706;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+[data-hve-multi-toast] b {
+  color: #D97706;
+  font-weight: 700;
+}
+
+[data-hve-multi-toast] .hve-multi-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 0;
+}
+
+[data-hve-multi-toast] .hve-multi-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  color: #5D534A;
+  transition: all 0.12s ease;
+  padding: 0;
+}
+
+[data-hve-multi-toast] .hve-multi-actions button:hover {
+  background: #F0EDE8;
+  color: #2D2B28;
+}
+
+[data-hve-multi-toast] .hve-multi-actions button:active {
+  background: #E8E5E0;
+  transform: scale(0.92);
+}
+
+[data-hve-multi-toast] .hve-multi-actions .hve-multi-btn-danger:hover {
+  background: #FEF2F2;
+  color: #DC2626;
+}
+
+[data-hve-multi-toast] .hve-multi-sep {
+  width: 1px;
+  height: 18px;
+  background: #E8E5E0;
+  margin: 0 3px;
+  flex-shrink: 0;
+}
+
+[data-hve-multi-toast] .hve-multi-hint {
+  color: #B8ADA4;
+  font-size: 11px;
+}
+
+/* ---- 锁定元素 ---- */
+[data-hve-locked] {
+  cursor: not-allowed !important;
+  position: relative;
+}
+
+/* ---- 组合元素 ---- */
+[data-hve-group][data-hve-selected] {
+  outline-style: dashed !important;
+  outline-color: #9333EA !important;
+}
+
+[data-hve-group][data-hve-selected]::before {
+  content: '组合' !important;
+  background: #9333EA !important;
+}
+
+[data-hve-locked]::after {
+  content: '🔒';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 12px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+[data-hve-locked][data-hve-selected] {
+  outline-color: #94a3b8 !important;
+}
+
+/* ---- 右键菜单禁用项 ---- */
+[data-hve-context-menu] .hve-cm-item.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ---- 页面排序器面板 ---- */
+[data-hve-page-sorter] {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  z-index: 2147483646;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(45,43,40,0.18), 0 2px 8px rgba(45,43,40,0.08);
+  width: 340px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  animation: hve-panel-in 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-hve-page-sorter] .hve-ps-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #E8E5E0;
+  background: #FAF9F7;
+  border-radius: 16px 16px 0 0;
+  flex-shrink: 0;
+}
+
+[data-hve-page-sorter] .hve-ps-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2D2B28;
+}
+
+[data-hve-page-sorter] .hve-ps-count {
+  font-size: 11px;
+  color: #D97706;
+  background: #FEF3C7;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+[data-hve-page-sorter] .hve-ps-close {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #9C8E82;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+[data-hve-page-sorter] .hve-ps-close:hover {
+  background: #F0EDE8;
+  color: #2D2B28;
+}
+
+[data-hve-page-sorter] .hve-ps-list {
+  overflow-y: auto;
+  padding: 8px;
+  flex: 1;
+}
+
+[data-hve-page-sorter] .hve-ps-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 2px solid transparent;
+  margin-bottom: 4px;
+}
+
+[data-hve-page-sorter] .hve-ps-item:hover {
+  background: #F5F2ED;
+}
+
+[data-hve-page-sorter] .hve-ps-item.active {
+  border-color: #D97706;
+  background: #FEF3C7;
+}
+
+[data-hve-page-sorter] .hve-ps-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+[data-hve-page-sorter] .hve-ps-item.drag-over {
+  border-color: #2563EB;
+  background: #EFF6FF;
+}
+
+[data-hve-page-sorter] .hve-ps-thumb {
+  flex-shrink: 0;
+}
+
+[data-hve-page-sorter] .hve-ps-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+[data-hve-page-sorter] .hve-ps-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+[data-hve-page-sorter] .hve-ps-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #D97706;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+[data-hve-page-sorter] .hve-ps-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #2D2B28;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-hve-page-sorter] .hve-ps-actions {
+  display: flex;
+  gap: 4px;
+}
+
+[data-hve-page-sorter] .hve-ps-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #E8E5E0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+}
+
+[data-hve-page-sorter] .hve-ps-btn:hover:not(:disabled) {
+  background: #F0EDE8;
+  border-color: #D97706;
+}
+
+[data-hve-page-sorter] .hve-ps-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ---- 对齐辅助线 ---- */
+[data-hve-guide] {
+  pointer-events: none !important;
+  opacity: 0.8;
+}
+
+/* ---- 格式刷模式 ---- */
+[data-hve-format-brush] * {
+  cursor: copy !important;
+}
+
+[data-hve-format-brush] [data-hve-hovered] {
+  outline-color: #9333EA !important;
+  outline-style: dashed !important;
+}
+
+/* ---- 颜色选择面板（position:fixed，JS 控制视口定位） ---- */
+[data-hve-color-panel] {
+  position: fixed;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(45,43,40,0.15);
+  padding: 12px;
+  z-index: 2147483646;
+  width: 240px;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  animation: hve-dropdown-in 0.15s ease;
+  white-space: normal;
+}
+
+[data-hve-color-panel] .hve-cp-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9C8E82;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+[data-hve-color-panel] .hve-cp-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+[data-hve-color-panel] .hve-cp-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-sizing: border-box;
+}
+
+[data-hve-color-panel] .hve-cp-swatch:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 1;
+  position: relative;
+}
+
+[data-hve-color-panel] .hve-cp-swatch.active {
+  outline: 2px solid #D97706;
+  outline-offset: 2px;
+  transform: scale(1.15);
+}
+
+[data-hve-color-panel] .hve-cp-custom {
+  border-top: 1px solid #E8E5E0;
+  padding-top: 8px;
+}
+
+[data-hve-color-panel] .hve-cp-custom label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9C8E82;
+  display: block;
+  margin-bottom: 6px;
+}
+
+[data-hve-color-panel] .hve-cp-custom-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+[data-hve-color-panel] .hve-cp-native {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 2px;
+  background: white;
+  flex-shrink: 0;
+}
+
+[data-hve-color-panel] .hve-cp-native::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+[data-hve-color-panel] .hve-cp-native::-webkit-color-swatch {
+  border: none;
+  border-radius: 5px;
+}
+
+[data-hve-color-panel] .hve-cp-hex {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'SF Mono', monospace;
+  color: #2D2B28;
+  background: white;
+  text-transform: uppercase;
+}
+
+[data-hve-color-panel] .hve-cp-hex:focus {
+  outline: none;
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217,119,6,0.12);
+}
+
+/* ---- 内容容器 (data-hve-content-box) ---- */
+[data-hve-content-box] {
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+[data-hve-content-box]:hover {
+  border-color: #D4CFC7 !important;
+}
+
+[data-hve-content-box][data-hve-selected] {
+  border-color: #D97706 !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1) !important;
+}
+
+/* 容器有拖拽悬停时高亮 */
+[data-hve-content-box].hve-drop-hover {
+  border-color: #D97706 !important;
+  background: rgba(217, 119, 6, 0.04) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12) !important;
+}
+
+/* 容器内工具条按钮 */
+[data-hve-box-toolbar] button:hover {
+  border-color: #D97706 !important;
+  background: #FEF3C7 !important;
+  transform: scale(1.08);
+}
+
+[data-hve-box-toolbar] button:active {
+  transform: scale(0.95);
+}
+
+/* 占位提示（容器为空时显示） */
+[data-hve-placeholder] {
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+[data-hve-content-box]:hover [data-hve-placeholder] {
+  opacity: 1;
+}
+
+/* ---- 图片拖拽覆盖层 ---- */
+[data-hve-drop-overlay] {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 2147483645;
+  background: rgba(217, 119, 6, 0.06);
+  border: 3px dashed #D97706;
+  pointer-events: none;
+  animation: hve-drop-overlay-in 0.25s ease;
+}
+
+[data-hve-drop-overlay] .hve-drop-content {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 48px;
+  background: rgba(255, 253, 249, 0.95);
+  border: 2px solid #D97706;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(217, 119, 6, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+[data-hve-drop-overlay] .hve-drop-content span {
+  font: 16px/1.4 'SF Pro Text', -apple-system, sans-serif;
+  font-weight: 600;
+  color: #D97706;
+  letter-spacing: 0.3px;
+}
+
+@keyframes hve-drop-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---- 图片拖拽插入位置指示线 ---- */
+[data-hve-drop-indicator] {
+  animation: hve-drop-indicator-pulse 1s ease infinite;
+}
+
+@keyframes hve-drop-indicator-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}

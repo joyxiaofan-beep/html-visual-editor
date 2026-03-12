@@ -1,0 +1,20 @@
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# CodeBuddy
+.codebuddy/
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# 测试文件
+测试/
+
+# 临时文件
+*.log
+*.tmp

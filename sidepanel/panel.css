@@ -1,0 +1,256 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background: #FAF9F7;
+  color: #2D2B28;
+  font-size: 13px;
+}
+
+.panel-container { padding: 20px; }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #E8E5E0;
+}
+
+.panel-header h2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2D2B28;
+}
+
+.panel-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: #D97706;
+  background: #FEF3C7;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.panel-empty {
+  text-align: center;
+  padding: 40px 16px;
+}
+
+.empty-icon {
+  margin-bottom: 12px;
+}
+
+.panel-empty p {
+  color: #9C8E82;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.empty-hint {
+  font-size: 11px;
+  color: #B8ADA4;
+}
+
+.section {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #F0EDE8;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9C8E82;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+}
+
+.prop-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.prop-label {
+  font-size: 12px;
+  color: #7A6F65;
+  min-width: 36px;
+  font-weight: 500;
+}
+
+.prop-value {
+  font-size: 12px;
+  color: #2D2B28;
+  font-weight: 600;
+}
+
+.tag-badge {
+  background: #F0EDE8;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: 'SF Mono', monospace;
+  font-size: 11px;
+}
+
+.prop-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  font-size: 12px;
+  background: white;
+  font-family: inherit;
+  color: #2D2B28;
+  transition: border-color 0.2s;
+}
+
+.prop-input:focus {
+  outline: none;
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217,119,6,0.08);
+}
+
+.prop-input-sm {
+  width: 56px;
+  padding: 5px 6px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: center;
+  background: white;
+  font-family: inherit;
+  color: #2D2B28;
+  transition: border-color 0.2s;
+}
+
+.prop-input-sm:focus {
+  outline: none;
+  border-color: #D97706;
+  box-shadow: 0 0 0 3px rgba(217,119,6,0.08);
+}
+
+.prop-select {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  font-size: 12px;
+  background: white;
+  font-family: inherit;
+  color: #2D2B28;
+  cursor: pointer;
+}
+
+.prop-select:focus {
+  outline: none;
+  border-color: #D97706;
+}
+
+.prop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.prop-grid label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #9C8E82;
+  font-weight: 500;
+}
+
+.prop-color {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #E8E5E0;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: none;
+}
+
+.prop-color::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.prop-color::-webkit-color-swatch {
+  border-radius: 4px;
+  border: none;
+}
+
+.prop-hex {
+  font-size: 11px;
+  color: #9C8E82;
+  font-family: 'SF Mono', monospace;
+}
+
+.prop-unit {
+  font-size: 11px;
+  color: #B8ADA4;
+  min-width: 24px;
+}
+
+.prop-range {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: #E8E5E0;
+  outline: none;
+}
+
+.prop-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #D97706;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+/* 对齐按钮组（PPT 风格） */
+.align-group {
+  display: flex;
+  gap: 2px;
+  background: #F0EDE8;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.align-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  color: #7A6F65;
+  transition: all 0.12s;
+  padding: 0;
+}
+
+.align-btn:hover {
+  background: #E8E5E0;
+  color: #2D2B28;
+}
+
+.align-btn.active {
+  background: white;
+  color: #D97706;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}

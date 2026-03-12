@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<p>右键每个 canvas → "Save image as..." 保存为对应的 png 文件</p>
+<div id="canvases"></div>
+<script>
+[16, 48, 128].forEach(size => {
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  const ctx = c.getContext('2d');
+  const r = size * 0.1875; // 圆角比例
+  // 圆角矩形背景
+  ctx.beginPath();
+  ctx.roundRect(0, 0, size, size, r);
+  ctx.fillStyle = '#4F46E5';
+  ctx.fill();
+  // 线条
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = size * 0.1;
+  const m = size * 0.25;
+  ctx.beginPath(); ctx.moveTo(m, size*0.31); ctx.lineTo(size-m, size*0.31); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(m, size*0.5); ctx.lineTo(size-m, size*0.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(m, size*0.69); ctx.lineTo(size*0.6, size*0.69); ctx.stroke();
+  // 铅笔图标
+  const ps = size * 0.22;
+  const px = size - m - ps*0.2;
+  const py = size*0.69 - ps*0.5;
+  ctx.fillStyle = '#fbbf24';
+  ctx.beginPath();
+  ctx.moveTo(px, py); ctx.lineTo(px+ps, py-ps*0.3);
+  ctx.lineTo(px+ps*0.7, py+ps*0.7); ctx.closePath();
+  ctx.fill();
+
+  const label = document.createElement('p');
+  label.textContent = `icon-${size}.png`;
+  document.getElementById('canvases').appendChild(label);
+  document.getElementById('canvases').appendChild(c);
+
+  // 自动导出下载链接
+  const link = document.createElement('a');
+  link.download = `icon-${size}.png`;
+  link.href = c.toDataURL('image/png');
+  link.textContent = `下载 icon-${size}.png`;
+  link.style.display = 'block';
+  document.getElementById('canvases').appendChild(link);
+});
+</script>
+</body>
+</html>
