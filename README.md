@@ -1,5 +1,7 @@
 # HTML Visual Editor
 
+[English](./README_EN.md)
+
 > 像编辑 PPT 一样可视化编辑本地 HTML 文件 — 拖拽、缩放、表格、图表、图片粘贴
 
 一款 Chrome 扩展，让你无需写代码就能直接在浏览器中可视化编辑 HTML 页面。
@@ -26,7 +28,7 @@
 
 1. 克隆本仓库：
    ```bash
-   git clone https://github.com/你的用户名/html-visual-editor.git
+   git clone https://github.com/joyxiaofan-beep/html-visual-editor.git
    ```
 
 2. 打开 Chrome，访问 `chrome://extensions/`
