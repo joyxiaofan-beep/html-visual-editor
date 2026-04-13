@@ -1,90 +1,90 @@
 # HTML Visual Editor
 
-[English](./README_EN.md)
+> Edit local HTML files visually like a PPT — drag, resize, tables, charts, image paste
 
-> 像编辑 PPT 一样可视化编辑本地 HTML 文件 — 拖拽、缩放、表格、图表、图片粘贴
-
-一款 Chrome 扩展，让你无需写代码就能直接在浏览器中可视化编辑 HTML 页面。
+A Chrome extension that lets you visually edit HTML pages directly in the browser — no coding required.
 
 ![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue?logo=googlechrome)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-green)
 
-## ✨ 功能特性
+[中文文档](./README_CN.md)
 
-- 🖱️ **拖拽移动** — 选中元素后直接拖拽移动位置
-- 📐 **缩放调整** — 拖拽手柄调整元素大小
-- ✏️ **文字编辑** — 双击文字直接编辑内容
-- 🎨 **样式工具栏** — 修改字号、颜色、加粗、对齐等样式
-- 📊 **表格编辑** — 增删行列、合并单元格
-- 🖼️ **图片处理** — 粘贴图片、替换图片
-- 📏 **对齐参考线** — 拖拽时自动显示对齐辅助线
-- ↩️ **撤销/重做** — 完整的操作历史记录
-- 💾 **保存导出** — 编辑后保存为 HTML 文件
-- 📑 **页面排序** — 支持 PPT 风格的页面重新排序
+## ✨ Features
 
-## 📦 安装
+- 🖱️ **Drag & Move** — Select and drag elements to reposition them
+- 📐 **Resize** — Drag handles to resize any element
+- ✏️ **Text Editing** — Double-click text to edit content inline
+- 🎨 **Style Toolbar** — Change font size, color, bold, alignment and more
+- 📊 **Table Editing** — Add/remove rows & columns, merge cells
+- 🖼️ **Image Handling** — Paste and replace images
+- 📏 **Alignment Guides** — Smart snap lines appear while dragging
+- ↩️ **Undo / Redo** — Full operation history
+- 💾 **Save & Export** — Save your edits as an HTML file
+- 📑 **Page Sorting** — PPT-style page reordering
 
-### 从源码安装（开发者模式）
+## 📦 Installation
 
-1. 克隆本仓库：
+### Install from Source (Developer Mode)
+
+1. Clone this repository:
    ```bash
    git clone https://github.com/joyxiaofan-beep/html-visual-editor.git
    ```
 
-2. 打开 Chrome，访问 `chrome://extensions/`
+2. Open Chrome and navigate to `chrome://extensions/`
 
-3. 开启右上角 **"开发者模式"**
+3. Enable **"Developer mode"** in the top-right corner
 
-4. 点击 **"加载已解压的扩展程序"**，选择本项目文件夹
+4. Click **"Load unpacked"** and select the project folder
 
-5. 完成！在任何本地 HTML 页面（`file:///` 协议）上点击扩展图标即可开始编辑
+5. Done! Click the extension icon on any local HTML page (`file:///` protocol) to start editing
 
-## 🚀 使用方法
+## 🚀 Usage
 
-1. 用 Chrome 打开一个本地 HTML 文件
-2. 点击扩展图标，启用编辑模式
-3. **单击** 选中元素 → 出现浮动工具栏
-4. **拖拽** 移动元素位置
-5. **双击** 文字进入编辑模式
-6. 编辑完成后，点击 **保存** 导出 HTML
+1. Open a local HTML file in Chrome
+2. Click the extension icon to enable edit mode
+3. **Click** to select an element → a floating toolbar appears
+4. **Drag** to move elements around
+5. **Double-click** text to enter editing mode
+6. When finished, click **Save** to export the HTML
 
-## 🏗️ 项目结构
+## 🏗️ Project Structure
 
 ```
-├── manifest.json          # 扩展配置（Manifest V3）
+├── manifest.json          # Extension config (Manifest V3)
 ├── background/            # Service Worker
-├── content/               # Content Scripts（核心编辑逻辑）
-│   ├── editor-core.js     # 编辑器核心控制
-│   ├── selector.js        # 元素选择器
-│   ├── toolbar.js         # 浮动工具栏
-│   ├── drag-move.js       # 拖拽移动
-│   ├── resize.js          # 缩放调整
-│   ├── text-edit.js       # 文字编辑
-│   ├── table-edit.js      # 表格编辑
-│   ├── image-handler.js   # 图片处理
-│   ├── align-guide.js     # 对齐参考线
-│   ├── insert-panel.js    # 插入面板
-│   ├── context-menu.js    # 右键菜单
-│   ├── page-sorter.js     # 页面排序
-│   └── history.js         # 撤销/重做
-├── popup/                 # 扩展弹出面板
-├── sidepanel/             # 侧边栏面板
-├── styles/                # 注入页面的 CSS
-├── utils/                 # 工具函数
-└── icons/                 # 扩展图标
+├── content/               # Content Scripts (core editing logic)
+│   ├── editor-core.js     # Editor core controller
+│   ├── selector.js        # Element selector
+│   ├── toolbar.js         # Floating toolbar
+│   ├── drag-move.js       # Drag & move
+│   ├── resize.js          # Resize handling
+│   ├── text-edit.js       # Text editing
+│   ├── table-edit.js      # Table editing
+│   ├── image-handler.js   # Image handling
+│   ├── align-guide.js     # Alignment guides
+│   ├── insert-panel.js    # Insert panel
+│   ├── context-menu.js    # Context menu
+│   ├── page-sorter.js     # Page sorting
+│   └── history.js         # Undo / Redo
+├── popup/                 # Extension popup panel
+├── sidepanel/             # Side panel
+├── styles/                # CSS injected into pages
+├── utils/                 # Utility functions
+└── icons/                 # Extension icons
 ```
 
-## 🛠️ 技术栈
+## 🛠️ Tech Stack
 
 - **Chrome Extension Manifest V3**
-- **原生 JavaScript**（零框架依赖）
-- **Content Scripts** 注入编辑能力
-- **CSS** 内联注入，不影响原页面结构
+- **Vanilla JavaScript** (zero framework dependencies)
+- **Content Scripts** inject editing capabilities
+- **CSS** inline injection, no interference with original page structure
 
-## 📋 兼容性
+## 📋 Compatibility
 
-- Chrome 88+（Manifest V3 支持）
-- 支持 `file:///` 本地文件和 `http(s)://` 网页
+- Chrome 88+ (Manifest V3 support)
+- Supports `file:///` local files and `http(s)://` web pages
 
 ## 📄 License
 
