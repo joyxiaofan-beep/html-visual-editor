@@ -299,7 +299,7 @@ window.HVE_Toolbar = (function () {
           { label: '按钮', icon: '🔘', action: () => insertElement('button') },
           { label: '分隔线', icon: '➖', action: () => insertElement('divider') },
           { label: '容器', icon: '📦', action: () => insertElement('container') },
-          { label: '链接', icon: '🔗', action: () => insertElement('link') },
+          { label: '链接', icon: '🔗', action: () => showLinkDialog() },
         ]);
         break;
 
@@ -799,6 +799,145 @@ window.HVE_Toolbar = (function () {
       if (table && window.HVE_Selector) window.HVE_Selector.select(table);
     }
   }
+
+  // ========== 链接对话框 ==========
+  function showLinkDialog(existingLink) {
+    const isEdit = !!existingLink;
+    const sel = currentTarget;
+
+    // 创建遮罩
+    const overlay = document.createElement('div');
+    overlay.setAttribute('data-hve-editor', 'true');
+    overlay.setAttribute('data-hve-dialog-overlay', 'true');
+
+    // 创建对话框
+    const dialog = document.createElement('div');
+    dialog.setAttribute('data-hve-editor', 'true');
+    dialog.setAttribute('data-hve-dialog', 'true');
+    dialog.innerHTML = `
+      <h3>${isEdit ? '编辑链接' : '插入链接'}</h3>
+      <div style="margin-bottom:14px;">
+        <label>链接文本</label>
+        <input type="text" id="hve-link-text" placeholder="输入显示文字" value="${isEdit ? existingLink.textContent : '链接文本'}">
+      </div>
+      <div style="margin-bottom:14px;">
+        <label>链接地址 (URL)</label>
+        <input type="text" id="hve-link-url" placeholder="https://example.com" value="${isEdit ? (existingLink.href === location.href + '#' || existingLink.getAttribute('href') === '#' ? '' : existingLink.href) : ''}">
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="hve-link-blank" ${isEdit && existingLink.target === '_blank' ? 'checked' : 'checked'} style="width:auto;accent-color:#D97706;">
+          在新窗口中打开
+        </label>
+      </div>
+      <div class="hve-dialog-actions">
+        ${isEdit ? '<button class="hve-btn-cancel" id="hve-link-remove" style="color:#DC2626;border-color:#FCA5A5;">移除链接</button>' : ''}
+        <button class="hve-btn-cancel" id="hve-link-cancel">取消</button>
+        <button class="hve-btn-confirm" id="hve-link-confirm">${isEdit ? '更新' : '插入'}</button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(dialog);
+
+    // 自动聚焦到 URL 输入框
+    const urlInput = dialog.querySelector('#hve-link-url');
+    const textInput = dialog.querySelector('#hve-link-text');
+    setTimeout(() => urlInput.focus(), 50);
+
+    function cleanup() {
+      overlay.remove();
+      dialog.remove();
+    }
+
+    // 取消
+    dialog.querySelector('#hve-link-cancel').addEventListener('click', cleanup);
+    overlay.addEventListener('click', cleanup);
+
+    // 移除链接（编辑模式）
+    const removeBtn = dialog.querySelector('#hve-link-remove');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        if (existingLink && existingLink.parentNode) {
+          const text = document.createTextNode(existingLink.textContent);
+          existingLink.parentNode.replaceChild(text, existingLink);
+          if (window.HVE_History) {
+            window.HVE_History.record({
+              type: 'dom', element: text,
+              before: { action: 'insert' },
+              after: { action: 'insert' },
+              description: '移除链接'
+            });
+          }
+        }
+        cleanup();
+      });
+    }
+
+    // 确认
+    dialog.querySelector('#hve-link-confirm').addEventListener('click', () => {
+      const text = textInput.value.trim() || '链接文本';
+      let url = urlInput.value.trim();
+      const blank = dialog.querySelector('#hve-link-blank').checked;
+
+      // URL 自动补全 http(s)
+      if (url && !/^(https?:\/\/|mailto:|tel:|#)/.test(url)) {
+        url = 'https://' + url;
+      }
+      if (!url) url = '#';
+
+      if (isEdit) {
+        // 编辑模式：更新已有链接
+        const oldHref = existingLink.href;
+        const oldText = existingLink.textContent;
+        existingLink.href = url;
+        existingLink.textContent = text;
+        existingLink.target = blank ? '_blank' : '';
+        existingLink.rel = blank ? 'noopener noreferrer' : '';
+        if (window.HVE_History) {
+          window.HVE_History.record({
+            type: 'attribute', element: existingLink,
+            before: { href: oldHref, textContent: oldText },
+            after: { href: url, textContent: text },
+            description: '编辑链接'
+          });
+        }
+        if (window.HVE_Selector) window.HVE_Selector.select(existingLink);
+      } else {
+        // 插入模式：创建新链接
+        const a = document.createElement('a');
+        a.href = url;
+        a.textContent = text;
+        a.target = blank ? '_blank' : '';
+        a.rel = blank ? 'noopener noreferrer' : '';
+        a.style.cssText = 'color:#D97706;text-decoration:underline;font-size:16px;display:inline-block;margin:4px 0;';
+        insertAfterTarget(a, sel);
+        if (window.HVE_Selector) window.HVE_Selector.select(a);
+        if (window.HVE_History) {
+          window.HVE_History.record({
+            type: 'dom', element: a,
+            before: { action: 'insert' },
+            after: { action: 'insert', html: a.outerHTML, parentSelector: window.HVE_History.getUniqueSelector(a.parentElement) },
+            description: '插入链接'
+          });
+        }
+      }
+      cleanup();
+    });
+
+    // 回车快速确认
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        dialog.querySelector('#hve-link-confirm').click();
+      } else if (e.key === 'Escape') {
+        cleanup();
+      }
+    });
+  }
+
+  // 暴露给外部（text-edit.js 编辑链接时使用）
+  window.HVE_LinkDialog = { show: showLinkDialog };
 
   function show(el) {
     if (!isActive) return;

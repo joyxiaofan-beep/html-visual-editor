@@ -540,6 +540,16 @@ window.HVE_InsertPanel = (function () {
       return;
     }
 
+    if (type === 'link') {
+      // 链接类型：弹出 URL 输入对话框
+      const target = insertTarget;
+      const pos = insertPosition;
+      const intoBox = isInsertIntoBox;
+      hidePanel();
+      showLinkDialogForInsert(target, pos, intoBox);
+      return;
+    }
+
     const newEl = createElementByType(type);
     if (newEl) {
       if (isInsertIntoBox) {
@@ -665,6 +675,93 @@ window.HVE_InsertPanel = (function () {
         description: '插入元素'
       });
     }
+  }
+
+  // ========== 链接插入对话框（insert-panel 专用） ==========
+
+  function showLinkDialogForInsert(target, pos, intoBox) {
+    // 如果 toolbar 的对话框可用，直接复用
+    if (window.HVE_LinkDialog) {
+      // 临时设置 toolbar 的 currentTarget 后调用
+      // 但 insert-panel 有自己的插入逻辑（doInsert / insertIntoBox），所以自建对话框
+    }
+
+    const overlay = document.createElement('div');
+    overlay.setAttribute('data-hve-editor', 'true');
+    overlay.setAttribute('data-hve-dialog-overlay', 'true');
+
+    const dialog = document.createElement('div');
+    dialog.setAttribute('data-hve-editor', 'true');
+    dialog.setAttribute('data-hve-dialog', 'true');
+    dialog.innerHTML = `
+      <h3>插入链接</h3>
+      <div style="margin-bottom:14px;">
+        <label>链接文本</label>
+        <input type="text" id="hve-link-text" placeholder="输入显示文字" value="链接文本">
+      </div>
+      <div style="margin-bottom:14px;">
+        <label>链接地址 (URL)</label>
+        <input type="text" id="hve-link-url" placeholder="https://example.com">
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="hve-link-blank" checked style="width:auto;accent-color:#D97706;">
+          在新窗口中打开
+        </label>
+      </div>
+      <div class="hve-dialog-actions">
+        <button class="hve-btn-cancel" id="hve-link-cancel">取消</button>
+        <button class="hve-btn-confirm" id="hve-link-confirm">插入</button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(dialog);
+    setTimeout(() => dialog.querySelector('#hve-link-url').focus(), 50);
+
+    function cleanup() {
+      overlay.remove();
+      dialog.remove();
+    }
+
+    dialog.querySelector('#hve-link-cancel').addEventListener('click', cleanup);
+    overlay.addEventListener('click', cleanup);
+
+    dialog.querySelector('#hve-link-confirm').addEventListener('click', () => {
+      const text = dialog.querySelector('#hve-link-text').value.trim() || '链接文本';
+      let url = dialog.querySelector('#hve-link-url').value.trim();
+      const blank = dialog.querySelector('#hve-link-blank').checked;
+
+      if (url && !/^(https?:\/\/|mailto:|tel:|#)/.test(url)) {
+        url = 'https://' + url;
+      }
+      if (!url) url = '#';
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.textContent = text;
+      a.target = blank ? '_blank' : '';
+      a.rel = blank ? 'noopener noreferrer' : '';
+      a.style.cssText = 'color:#D97706;text-decoration:underline;font-size:16px;display:inline-block;margin:4px 0;';
+
+      if (intoBox) {
+        removePlaceholder(target);
+        insertIntoBox(target, a);
+      } else {
+        doInsert(a, target, pos);
+      }
+      if (window.HVE_Selector) window.HVE_Selector.select(a);
+      cleanup();
+    });
+
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        dialog.querySelector('#hve-link-confirm').click();
+      } else if (e.key === 'Escape') {
+        cleanup();
+      }
+    });
   }
 
   // ========== 表格对话框 ==========

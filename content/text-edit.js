@@ -25,6 +25,14 @@ window.HVE_TextEdit = (function () {
     // 检查是否是容器类元素（留给 insert-panel 处理）
     const containerTags = new Set(['SECTION', 'MAIN', 'ARTICLE', 'ASIDE', 'HEADER', 'FOOTER', 'NAV', 'BODY']);
     if (containerTags.has(target.tagName)) return;
+
+    // 双击 <a> 链接时弹出编辑链接对话框（而非进入文本编辑模式）
+    if (target.tagName === 'A' && window.HVE_LinkDialog) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      window.HVE_LinkDialog.show(target);
+      return;
+    }
     
     if (!isTextElement(target)) return;
     e.preventDefault();
