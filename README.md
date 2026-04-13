@@ -21,6 +21,9 @@ A Chrome extension that lets you visually edit HTML pages directly in the browse
 - ↩️ **Undo / Redo** — Full operation history
 - 💾 **Save & Export** — Save your edits as an HTML file
 - 📑 **Page Sorting** — PPT-style page reordering
+- 🎨 **Canvas Mode** — Figma-like freeform drawing canvas with text, shapes, lines, arrows
+- 🖨️ **PDF Pagination** — Preview page breaks and export HTML to PDF with smart pagination
+- 📊 **Chart Typography** — Pre-built chart components (stat cards, KPI grids, legends, etc.) and fine typography controls
 
 ## 📦 Installation
 
@@ -66,6 +69,9 @@ A Chrome extension that lets you visually edit HTML pages directly in the browse
 │   ├── insert-panel.js    # Insert panel
 │   ├── context-menu.js    # Context menu
 │   ├── page-sorter.js     # Page sorting
+│   ├── canvas-mode.js     # Canvas drawing mode
+│   ├── pdf-paginator.js   # PDF pagination & export
+│   ├── chart-typography.js# Chart components & typography
 │   └── history.js         # Undo / Redo
 ├── popup/                 # Extension popup panel
 ├── sidepanel/             # Side panel
@@ -76,9 +82,11 @@ A Chrome extension that lets you visually edit HTML pages directly in the browse
 
 ## 🗺️ Roadmap
 
-- [ ] 📝 **Canvas Mode** — Figma-like freeform text boxes with precise text measurement (powered by [Pretext](https://github.com/chenglou/pretext))
-- [ ] 📊 **Custom Chart Typography** — Accurate text layout inside user-created charts
-- [ ] 🖨️ **HTML-to-PDF Pagination** — Predictive page-break calculation before PDF export
+- [x] 🎨 **Canvas Mode** — Figma-like freeform drawing canvas with text, shapes, lines, arrows, color picker, and SVG/PNG export
+- [x] 📊 **Chart Typography** — Pre-built chart components (stat cards, KPI grids, legends, etc.) and fine-grained typography controls
+- [x] 🖨️ **HTML-to-PDF Pagination** — Preview page breaks, smart pagination that avoids mid-element breaks, and PDF export
+- [ ] 🔌 **Plugin System** — Extensible third-party plugin architecture
+- [ ] 🤝 **Collaborative Editing** — Real-time multi-user editing support
 
 ## 🛠️ Tech Stack
 

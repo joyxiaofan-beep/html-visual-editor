@@ -47,6 +47,9 @@
         "content/insert-panel.js",
         "content/context-menu.js",
         "content/page-sorter.js",
+        "content/canvas-mode.js",
+        "content/pdf-paginator.js",
+        "content/chart-typography.js",
         "content/editor-core.js"
       ],
       "css": ["styles/inject.css"],

@@ -40,6 +40,9 @@ window.HVE_Core = (function () {
     if (window.HVE_ContextMenu) window.HVE_ContextMenu.deactivate();
     if (window.HVE_AlignGuide) window.HVE_AlignGuide.deactivate();
     if (window.HVE_PageSorter) window.HVE_PageSorter.deactivate();
+    if (window.HVE_Canvas) window.HVE_Canvas.deactivate();
+    if (window.HVE_PDFPaginator) window.HVE_PDFPaginator.deactivate();
+    if (window.HVE_ChartTypo) window.HVE_ChartTypo.deactivate();
 
     document.removeEventListener('keydown', onKeyDown, true);
     hideStatusIndicator();

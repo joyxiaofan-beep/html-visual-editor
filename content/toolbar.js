@@ -113,6 +113,15 @@ window.HVE_Toolbar = (function () {
         <button data-action="page-sorter" title="页面排序 (⌘⇧P)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="8" height="5" rx="1"/><rect x="2" y="10" width="8" height="5" rx="1"/><rect x="2" y="17" width="8" height="5" rx="1"/><path d="M14 5h7M14 12h7M14 19h7"/></svg>
         </button>
+        <button data-action="canvas-mode" title="画板模式 — Figma 风格自由画布">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><circle cx="8" cy="8" r="2" fill="currentColor"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>
+        </button>
+        <button data-action="pdf-paginator" title="PDF 分页预测与导出">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="6" y1="13" x2="18" y2="13" stroke-dasharray="3 2"/><line x1="6" y1="17" x2="18" y2="17" stroke-dasharray="3 2"/></svg>
+        </button>
+        <button data-action="chart-typo" title="图表排版工具">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M17.5 14v7M14.5 17.5h6"/></svg>
+        </button>
         <button data-action="undo" title="撤销 (⌘Z)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 105.64-11.36L1 10"/></svg>
         </button>
@@ -400,6 +409,70 @@ window.HVE_Toolbar = (function () {
 
       case 'page-sorter':
         if (window.HVE_PageSorter) window.HVE_PageSorter.toggleSorter();
+        break;
+
+      case 'canvas-mode':
+        if (window.HVE_Canvas) {
+          // 互斥：开启画板前关闭其他面板
+          if (!window.HVE_Canvas.isCanvasMode()) {
+            if (window.HVE_PDFPaginator?.isActive()) {
+              window.HVE_PDFPaginator.deactivate();
+              const pb = toolbarEl?.querySelector('[data-action="pdf-paginator"]');
+              if (pb) pb.classList.remove('hve-tb-pdf-active');
+            }
+            if (window.HVE_ChartTypo?.isActive()) {
+              window.HVE_ChartTypo.deactivate();
+              const cb = toolbarEl?.querySelector('[data-action="chart-typo"]');
+              if (cb) cb.classList.remove('hve-tb-chart-active');
+            }
+          }
+          window.HVE_Canvas.toggle();
+          // 更新按钮激活态
+          const cvsBtn = toolbarEl?.querySelector('[data-action="canvas-mode"]');
+          if (cvsBtn) cvsBtn.classList.toggle('hve-tb-canvas-active', window.HVE_Canvas.isCanvasMode());
+        }
+        break;
+
+      case 'pdf-paginator':
+        if (window.HVE_PDFPaginator) {
+          // 互斥：开启 PDF 面板前关闭其他面板
+          if (!window.HVE_PDFPaginator.isActive()) {
+            if (window.HVE_Canvas?.isCanvasMode()) {
+              window.HVE_Canvas.deactivate();
+              const cvb = toolbarEl?.querySelector('[data-action="canvas-mode"]');
+              if (cvb) cvb.classList.remove('hve-tb-canvas-active');
+            }
+            if (window.HVE_ChartTypo?.isActive()) {
+              window.HVE_ChartTypo.deactivate();
+              const cb = toolbarEl?.querySelector('[data-action="chart-typo"]');
+              if (cb) cb.classList.remove('hve-tb-chart-active');
+            }
+          }
+          window.HVE_PDFPaginator.toggle();
+          const pdfBtn = toolbarEl?.querySelector('[data-action="pdf-paginator"]');
+          if (pdfBtn) pdfBtn.classList.toggle('hve-tb-pdf-active', window.HVE_PDFPaginator.isActive());
+        }
+        break;
+
+      case 'chart-typo':
+        if (window.HVE_ChartTypo) {
+          // 互斥：开启图表面板前关闭其他面板
+          if (!window.HVE_ChartTypo.isActive()) {
+            if (window.HVE_Canvas?.isCanvasMode()) {
+              window.HVE_Canvas.deactivate();
+              const cvb = toolbarEl?.querySelector('[data-action="canvas-mode"]');
+              if (cvb) cvb.classList.remove('hve-tb-canvas-active');
+            }
+            if (window.HVE_PDFPaginator?.isActive()) {
+              window.HVE_PDFPaginator.deactivate();
+              const pb = toolbarEl?.querySelector('[data-action="pdf-paginator"]');
+              if (pb) pb.classList.remove('hve-tb-pdf-active');
+            }
+          }
+          window.HVE_ChartTypo.toggle();
+          const chartBtn = toolbarEl?.querySelector('[data-action="chart-typo"]');
+          if (chartBtn) chartBtn.classList.toggle('hve-tb-chart-active', window.HVE_ChartTypo.isActive());
+        }
         break;
 
       case 'undo':

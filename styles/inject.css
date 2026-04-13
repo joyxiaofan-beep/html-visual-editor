@@ -1101,3 +1101,629 @@ th[data-hve-editing] {
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }
 }
+
+/* ============================================
+   Canvas 画板模式样式
+   ============================================ */
+
+/* 画布覆盖层 */
+[data-hve-canvas-overlay] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2147483640;
+  background: transparent;
+  animation: hve-canvas-fade-in 0.25s ease;
+}
+
+[data-hve-canvas] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes hve-canvas-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Canvas 工具栏 */
+[data-hve-canvas-toolbar] {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(45,43,40,0.12), 0 1px 4px rgba(45,43,40,0.08);
+  z-index: 2147483646;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  user-select: none;
+  animation: hve-canvas-toolbar-in 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes hve-canvas-toolbar-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.hve-cvs-tb-group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.hve-cvs-tb-sep {
+  width: 1px;
+  height: 22px;
+  background: #E8E5E0;
+  margin: 0 4px;
+}
+
+[data-hve-canvas-toolbar] button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #57534E;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+[data-hve-canvas-toolbar] button:hover {
+  background: #F5F0EA;
+  color: #292524;
+}
+
+[data-hve-canvas-toolbar] button.hve-cvs-active {
+  background: #FEF3C7;
+  color: #D97706;
+  box-shadow: inset 0 0 0 1px rgba(217,119,6,0.2);
+}
+
+/* 颜色指示点 */
+.hve-cvs-color-dot {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+  border: 0.5px solid rgba(0,0,0,0.1);
+}
+
+/* 颜色面板色块 */
+.hve-cvs-color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.hve-cvs-color-swatch:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Canvas 文本输入框 */
+[data-hve-canvas-textinput] {
+  font-family: inherit;
+  caret-color: #D97706;
+}
+
+[data-hve-canvas-textinput]:focus {
+  outline: none;
+  border-color: #D97706 !important;
+  box-shadow: 0 0 0 3px rgba(217,119,6,0.15);
+}
+
+/* DOM 工具栏的画板按钮激活态 */
+[data-hve-toolbar] button[data-action="canvas-mode"].hve-tb-canvas-active {
+  background: #FEF3C7;
+  color: #D97706;
+  box-shadow: inset 0 0 0 1px rgba(217,119,6,0.2);
+}
+
+/* ============================================
+   PDF 分页预测样式
+   ============================================ */
+
+/* 控制面板 */
+[data-hve-pdf-panel] {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(45,43,40,0.12), 0 1px 4px rgba(45,43,40,0.08);
+  z-index: 2147483645;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  animation: hve-pdf-panel-in 0.3s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+}
+
+@keyframes hve-pdf-panel-in {
+  from { opacity: 0; transform: translateY(-50%) translateX(12px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+.hve-pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid #E8E5E0;
+  background: #FAF7F2;
+}
+
+.hve-pdf-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #292524;
+}
+
+.hve-pdf-close {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #78716C;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hve-pdf-close:hover {
+  background: #F5F0EA;
+  color: #292524;
+}
+
+.hve-pdf-body {
+  padding: 12px 14px;
+}
+
+.hve-pdf-row {
+  margin-bottom: 10px;
+}
+
+.hve-pdf-row label {
+  display: block;
+  font-size: 11px;
+  color: #78716C;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.hve-pdf-row select,
+.hve-pdf-row input[type="number"] {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #292524;
+  background: white;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.hve-pdf-row select:focus,
+.hve-pdf-row input:focus {
+  border-color: #D97706;
+  box-shadow: 0 0 0 2px rgba(217,119,6,0.1);
+}
+
+.hve-pdf-row input[type="range"] {
+  width: calc(100% - 45px);
+  vertical-align: middle;
+  accent-color: #D97706;
+}
+
+.hve-pdf-scale-label {
+  font-size: 11px;
+  color: #78716C;
+  margin-left: 4px;
+}
+
+.hve-pdf-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.hve-pdf-toggle button {
+  flex: 1;
+  padding: 5px 10px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  background: white;
+  font-size: 12px;
+  color: #78716C;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hve-pdf-toggle button.active {
+  background: #FEF3C7;
+  color: #D97706;
+  border-color: #D97706;
+  font-weight: 500;
+}
+
+.hve-pdf-margins {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 4px;
+}
+
+.hve-pdf-margins input {
+  width: 100% !important;
+  text-align: center;
+  padding: 4px 2px !important;
+  font-size: 11px !important;
+}
+
+.hve-pdf-divider {
+  height: 1px;
+  background: #E8E5E0;
+  margin: 10px 0;
+}
+
+.hve-pdf-info {
+  font-size: 13px;
+  color: #D97706;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.hve-pdf-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hve-pdf-btn-primary {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #D97706, #B45309);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hve-pdf-btn-primary:hover {
+  box-shadow: 0 2px 12px rgba(217,119,6,0.3);
+  transform: translateY(-1px);
+}
+
+.hve-pdf-btn {
+  width: 100%;
+  padding: 6px 12px;
+  border: 1px solid #E8E5E0;
+  border-radius: 10px;
+  background: white;
+  color: #57534E;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hve-pdf-btn:hover {
+  background: #F5F0EA;
+  border-color: #D97706;
+}
+
+/* 分页线预览 */
+[data-hve-pdf-overlay] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 2147483639;
+}
+
+.hve-pdf-break-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 2px dashed #D97706;
+  pointer-events: none;
+}
+
+.hve-pdf-break-line.hve-pdf-break-manual {
+  border-top-color: #2563EB;
+  border-top-style: solid;
+}
+
+.hve-pdf-break-line.hve-pdf-break-slide {
+  border-top-color: #16A34A;
+  border-top-style: dotted;
+}
+
+.hve-pdf-break-label {
+  position: absolute;
+  left: 12px;
+  top: -18px;
+  font: 10px/1 'SF Pro Text', -apple-system, sans-serif;
+  color: white;
+  background: #D97706;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.hve-pdf-break-manual .hve-pdf-break-label {
+  background: #2563EB;
+}
+
+.hve-pdf-break-slide .hve-pdf-break-label {
+  background: #16A34A;
+}
+
+.hve-pdf-page-number {
+  position: absolute;
+  right: 12px;
+  top: -18px;
+  font: 10px/1 'SF Pro Text', -apple-system, sans-serif;
+  color: white;
+  background: #D97706;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* PDF 工具栏按钮激活态 */
+[data-hve-toolbar] button[data-action="pdf-paginator"].hve-tb-pdf-active {
+  background: #FEF3C7;
+  color: #D97706;
+  box-shadow: inset 0 0 0 1px rgba(217,119,6,0.2);
+}
+
+/* ============================================
+   图表排版工具样式
+   ============================================ */
+
+[data-hve-chart-panel] {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #FFFDF9;
+  border: 1px solid #E8E5E0;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(45,43,40,0.12), 0 1px 4px rgba(45,43,40,0.08);
+  z-index: 2147483645;
+  font-family: 'SF Pro Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  animation: hve-chart-panel-in 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes hve-chart-panel-in {
+  from { opacity: 0; transform: translateY(-50%) translateX(12px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+/* 滚动条美化 */
+[data-hve-chart-panel]::-webkit-scrollbar {
+  width: 4px;
+}
+
+[data-hve-chart-panel]::-webkit-scrollbar-thumb {
+  background: #D6D3CE;
+  border-radius: 4px;
+}
+
+.hve-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid #E8E5E0;
+  background: #FAF7F2;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.hve-chart-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #292524;
+}
+
+.hve-chart-close {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #78716C;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hve-chart-close:hover {
+  background: #F5F0EA;
+  color: #292524;
+}
+
+.hve-chart-body {
+  padding: 12px 14px;
+}
+
+.hve-chart-section {
+  margin-bottom: 4px;
+}
+
+.hve-chart-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #A8A29E;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.hve-chart-divider {
+  height: 1px;
+  background: #E8E5E0;
+  margin: 10px 0;
+}
+
+/* 图表模板网格 */
+.hve-chart-template-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.hve-chart-template-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  border: 1px solid #E8E5E0;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.hve-chart-template-btn:hover {
+  background: #FEF3C7;
+  border-color: #D97706;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(217,119,6,0.12);
+}
+
+.hve-chart-template-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.hve-chart-template-name {
+  font-size: 10px;
+  color: #57534E;
+  font-weight: 500;
+}
+
+/* 排版预设列表 */
+.hve-chart-typo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hve-chart-typo-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #E8E5E0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.hve-chart-typo-btn:hover {
+  background: #F5F0EA;
+  border-color: #D97706;
+}
+
+.hve-chart-typo-preview {
+  font-size: 14px;
+  color: #292524;
+  min-width: 55px;
+}
+
+.hve-chart-typo-name {
+  font-size: 11px;
+  color: #78716C;
+  font-weight: 500;
+}
+
+/* 精细控制 */
+.hve-chart-fine-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hve-chart-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hve-chart-ctrl-row label {
+  font-size: 11px;
+  color: #78716C;
+  min-width: 50px;
+  font-weight: 500;
+}
+
+.hve-chart-ctrl-row input[type="range"] {
+  flex: 1;
+  accent-color: #D97706;
+  height: 4px;
+}
+
+.hve-chart-ctrl-row select {
+  flex: 1;
+  padding: 3px 6px;
+  border: 1px solid #E8E5E0;
+  border-radius: 6px;
+  font-size: 11px;
+  color: #292524;
+  background: white;
+}
+
+.hve-chart-ctrl-val {
+  font-size: 10px;
+  color: #A8A29E;
+  min-width: 32px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 图表排版工具栏按钮激活态 */
+[data-hve-toolbar] button[data-action="chart-typo"].hve-tb-chart-active {
+  background: #FEF3C7;
+  color: #D97706;
+  box-shadow: inset 0 0 0 1px rgba(217,119,6,0.2);
+}
