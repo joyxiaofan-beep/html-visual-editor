@@ -74,6 +74,12 @@
 └── icons/                 # 扩展图标
 ```
 
+## 🗺️ 未来规划
+
+- [ ] 📝 **Canvas 画板模式** — 类似 Figma 的自由文本框，基于 [Pretext](https://github.com/chenglou/pretext) 实现精确文字测量与布局
+- [ ] 📊 **自定义图表文字排版** — 在用户创建的图表中实现精确的文字排版控制
+- [ ] 🖨️ **HTML 转 PDF 精确分页** — 导出 PDF 前预测分页位置，避免内容被截断
+
 ## 🛠️ 技术栈
 
 - **Chrome Extension Manifest V3**

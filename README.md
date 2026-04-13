@@ -74,6 +74,12 @@ A Chrome extension that lets you visually edit HTML pages directly in the browse
 └── icons/                 # Extension icons
 ```
 
+## 🗺️ Roadmap
+
+- [ ] 📝 **Canvas Mode** — Figma-like freeform text boxes with precise text measurement (powered by [Pretext](https://github.com/chenglou/pretext))
+- [ ] 📊 **Custom Chart Typography** — Accurate text layout inside user-created charts
+- [ ] 🖨️ **HTML-to-PDF Pagination** — Predictive page-break calculation before PDF export
+
 ## 🛠️ Tech Stack
 
 - **Chrome Extension Manifest V3**
